@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+//import 'package:english_words/english_words.dart';
 import 'package:practice_english/ui/pages/home_page.dart';
 
 void main() => runApp(const MyApp());
