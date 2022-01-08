@@ -14,10 +14,10 @@ class _AnswersState extends State<Answers> {
   List<String> getOptions = [];
 
   final List<String> _options = <String>[
-    "Answer 1",
-    "Answer 2",
-    "Answer 3",
-    "Answer 4",
+    // "Answer 1",
+    //"Answer 2",
+    //"Answer 3",
+    //"Answer 4",
   ];
   int? selectedAnswer;
 
@@ -25,6 +25,8 @@ class _AnswersState extends State<Answers> {
   Widget build(BuildContext context) {
     setState(() {
       words.takeWords();
+      _options.clear();
+      words.createChoice(_options);
     });
     return Stack(
       children: [
