@@ -4,73 +4,61 @@ import 'package:english_words/english_words.dart';
 import 'package:translator/translator.dart';
 
 class Words {
-  final Map<String, String> englishWords = {};
+  final Map<String, String> englishWords = {"Beach": "Kumsal"};
 
   //List<String> englishWords = ["beach"];
   //List<String> toTranslateTR = ["plaj"];
 
   void _createWords() {
-    englishWords["beach"] = "Kumsal";
-
-    //log(englishWords.keys.last + englishWords.values.last);
-
     final translator = GoogleTranslator();
     final wordPair = WordPair.random();
-    //englishWords.insert(0, wordPair.first.toString());
-    //log("aşama 2  eng kelime eklendi : " + wordPair.first.toString());
+
     translator
         .translate(wordPair.first.toString(), from: 'en', to: 'tr')
         .then((tr) {
       englishWords[wordPair.first.toString()] = "$tr";
-      //log("Eklenen kelime: Eng : " +
-      //   wordPair.first.toString() +
-      //    " TR: " +
-      //    tr.toString());
-      //log("TÜrkçe:" + tr.toString());
+      log("Eklenen kelime: " + wordPair.first.toString());
+      log("Türkçe kelime: " + tr.toString());
     });
   }
 
   void takeWords() {
+    log("kelime eklendi");
     return _createWords();
   }
 
-  List<String> createChoice(List<String> x) {
-    String? trueChoice, choice2, choice3, choice4;
+  Future<List<String>> createChoice(List<String> x) async {
+    String? trueChoice;
     final translator = GoogleTranslator();
-    List<String> geciciList = [];
 
     trueChoice = englishWords.values.last;
     x.add(trueChoice);
-    log("şık 1 eklendi: " + trueChoice);
 
-    translator
-        .translate(WordPair.random().first.toString(), from: 'en', to: 'tr')
-        .then((tr) {
-      choice2 = tr.toString();
-      log("listeye eklenecek kelime: " + choice2.toString());
-      x.add(choice2.toString());
-    });
+    var choice2 = await translator.translate(WordPair.random().first.toString(),
+        from: 'en', to: 'tr');
 
-    log("şık 2 eklendi: " + choice2.toString());
+    x.add(choice2.text);
 
-    translator
-        .translate(WordPair.random().first.toString(), from: 'en', to: 'tr')
-        .then((tr) {
-      choice3 = tr.toString();
-      x.add(choice3.toString());
-      log("şık 3 eklendi: " + choice3.toString());
-    });
+    var choice3 = await translator.translate(WordPair.random().first.toString(),
+        from: 'en', to: 'tr');
 
-    translator
-        .translate(WordPair.random().first.toString(), from: 'en', to: 'tr')
-        .then((tr) {
-      choice4 = tr.toString();
-      x.add(choice4.toString());
-      log("şık 4 eklendi: " + choice4.toString());
-    });
+    x.add(choice3.text);
 
-    //log(x[0]);
-    //log(x[1]);
+    var choice4 = await translator.translate(WordPair.random().first.toString(),
+        from: 'en', to: 'tr');
+
+    x.add(choice4.text);
+
+    //setState(() {
+    //x.add(choice2.toString());
+    //x.add(choice3.toString());
+    //x.add(choice4.toString());
+    //});
+    log("1. Kelime: " + x[0]);
+    log("2. Kelime: " + x[1]);
+    log("3. Kelime: " + x[2]);
+    log("4. Kelime: " + x[3]);
+
     return x;
   }
 }

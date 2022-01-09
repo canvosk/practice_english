@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:practice_english/models/words.dart';
+import 'package:translator/translator.dart';
 
 class Answers extends StatefulWidget {
   const Answers({Key? key}) : super(key: key);
@@ -14,10 +16,10 @@ class _AnswersState extends State<Answers> {
   List<String> getOptions = [];
 
   final List<String> _options = <String>[
-    // "Answer 1",
-    //"Answer 2",
-    //"Answer 3",
-    //"Answer 4",
+    "Answer 1",
+    "Answer 2",
+    "Answer 3",
+    "Answer 4",
   ];
   int? selectedAnswer;
 
@@ -27,6 +29,17 @@ class _AnswersState extends State<Answers> {
       words.takeWords();
       _options.clear();
       words.createChoice(_options);
+
+      log("------------");
+      log("1. Kelime: " + _options[0]);
+      //log("2. Kelime: " + _options[1]);
+      //log("3. Kelime: " + _options[2]);
+      //log("4. Kelime: " + _options[3]);
+      log("------------");
+
+      for (var a in _options) {
+        log("a: " + a);
+      }
     });
     return Stack(
       children: [
