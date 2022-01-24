@@ -1,8 +1,9 @@
 import 'dart:developer';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:practice_english/models/words.dart';
-import 'package:translator/translator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:practice_english/core/state/words_state.dart';
+import 'package:practice_english/ui/components/style.dart';
+import 'package:provider/provider.dart';
 
 class Answers extends StatefulWidget {
   const Answers({Key? key}) : super(key: key);
@@ -12,9 +13,6 @@ class Answers extends StatefulWidget {
 }
 
 class _AnswersState extends State<Answers> {
-  Words words = Words();
-  List<String> getOptions = [];
-
   final List<String> _options = <String>[
     "Answer 1",
     "Answer 2",
@@ -23,79 +21,55 @@ class _AnswersState extends State<Answers> {
   ];
   int? selectedAnswer;
 
+  WordsState words = WordsState();
+
+  //@override
+  //void initState() {
+  //  super.initState();
+  //  words.createWords();
+  //  words.createChoice();
+//
+  //  for (var a in words.option) {
+  //    log("a: " + a);
+  //  }
+  //}
+
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      words.takeWords();
-      _options.clear();
-      words.createChoice(_options);
+    return Consumer<WordsState>(builder: (context, state, a) {
+      //var words = state.words;
 
-      log("------------");
-      log("1. Kelime: " + _options[0]);
-      //log("2. Kelime: " + _options[1]);
-      //log("3. Kelime: " + _options[2]);
-      //log("4. Kelime: " + _options[3]);
-      log("------------");
-
-      for (var a in _options) {
-        log("a: " + a);
-      }
-    });
-    return Stack(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 100),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _question,
-                const Divider(),
-                for (var o in _options) _answer(o),
-                const Divider(),
-              ],
+      return Column(
+        children: [
+          Center(
+            child: Text(
+              state.words.first.englishWords,
+              style: GoogleFonts.dongle(textStyle: questionText, fontSize: 80),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: 100,
-            width: double.infinity,
-            color: Colors.yellow,
-            child: MaterialButton(
-              onPressed: () {
-                if (selectedAnswer != null) {
-                  log("Selected answer is $selectedAnswer");
-                } else {
-                  log("you must select an answer before submitting");
-                }
-              },
-              child: Text(words.englishWords.keys.last +
-                  " " +
-                  words.englishWords.values.last),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget get _question => Container(
-        width: double.infinity,
-        color: Colors.red,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-        child: const Text(
-          "ENG KELIME",
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 24),
-        ),
+          const Divider(),
+          for (var o in _options) _answer(o),
+          const Divider(),
+          ElevatedButton(
+            onPressed: () async {
+              var state = Provider.of<WordsState>(context, listen: false);
+              await state.createWords();
+              await state.createChoice();
+            },
+            child: const Text("Yeni Soruya Gec"),
+          )
+        ],
       );
+    });
+  }
 
   Widget _answer(String option) {
     int index = _options.indexOf(option);
     return ListTile(
-      title: Text(option),
+      title: Text(
+        option,
+        style: GoogleFonts.dongle(textStyle: questionText, fontSize: 35),
+      ),
       selectedColor: Colors.blue,
       selected: index == selectedAnswer,
       onTap: () {

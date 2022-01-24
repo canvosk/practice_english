@@ -1,12 +1,10 @@
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:practice_english/models/words.dart';
-//import 'package:english_words/english_words.dart';
+import 'package:practice_english/core/state/words_state.dart';
 import 'package:practice_english/ui/pages/home_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  Words words = Words();
-  words.takeWords();
   runApp(const MyApp());
 }
 
@@ -15,10 +13,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Practice English',
-      home: HomePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => WordsState(),
+        ),
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Practice English',
+        home: HomePage(),
+      ),
     );
   }
 }
