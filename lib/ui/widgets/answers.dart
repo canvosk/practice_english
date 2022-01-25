@@ -13,7 +13,7 @@ class Answers extends StatefulWidget {
 }
 
 class _AnswersState extends State<Answers> {
-  final List<String> _options = <String>[
+  List<String> _options = <String>[
     "Answer 1",
     "Answer 2",
     "Answer 3",
@@ -24,15 +24,15 @@ class _AnswersState extends State<Answers> {
   WordsState words = WordsState();
 
   //@override
-  //void initState() {
-  //  super.initState();
-  //  words.createWords();
-  //  words.createChoice();
-//
-  //  for (var a in words.option) {
-  //    log("a: " + a);
-  //  }
-  //}
+  // void initState() {
+  //   super.initState();
+  //   words.createWords();
+  //   words.createChoice();
+
+  //   for (var a in words.option) {
+  //     log("a: " + a);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class _AnswersState extends State<Answers> {
             onPressed: () async {
               var state = Provider.of<WordsState>(context, listen: false);
               await state.createWords();
-              await state.createChoice();
+              _options = await state.createChoice();
             },
             child: const Text("Yeni Soruya Gec"),
           )

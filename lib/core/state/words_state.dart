@@ -14,18 +14,17 @@ class WordsState with ChangeNotifier {
 
   Words get lastWord => _words.first;
 
-  createWords() {
+  Future createWords() async {
     final translator = GoogleTranslator();
     final wordPair = WordPair.random();
 
-    translator
-        .translate(wordPair.first.toString(), from: 'en', to: 'tr')
-        .then((tr) {
-      log("Yeni Kelime: " + wordPair.first.toString());
-      Words x =
-          Words(englishWords: wordPair.first.toString(), translatedToTr: "$tr");
-      _words.insert(0, x);
-    });
+    var newWord = wordPair.first.toString();
+    var translated = await translator.translate(newWord, from: 'en', to: 'tr');
+
+    Words x = Words(englishWords: newWord, translatedToTr: translated.text);
+    _words.insert(0, x);
+
+    print("Kelime uretildi: " + _words[0].toString());
 
     notifyListeners();
   }
@@ -61,6 +60,8 @@ class WordsState with ChangeNotifier {
     log("4. cevap: " + choice4.toString());
 
     option.shuffle();
+
+    print("List: " + option.toString());
 
     notifyListeners();
 
