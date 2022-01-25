@@ -23,11 +23,11 @@ class _AnswersState extends State<Answers> {
 
   WordsState words = WordsState();
 
-  //@override
-  // void initState() {
+  // @override
+  // void initState() async {
   //   super.initState();
   //   words.createWords();
-  //   words.createChoice();
+  //   _options = await words.createChoice();
 
   //   for (var a in words.option) {
   //     log("a: " + a);
