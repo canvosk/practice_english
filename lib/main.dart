@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:practice_english/core/state/words_state.dart';
 import 'package:practice_english/ui/pages/home_page.dart';
+import 'package:practice_english/ui/pages/main_page.dart';
+import 'package:practice_english/ui/pages/test_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,10 +21,15 @@ class MyApp extends StatelessWidget {
           create: (context) => WordsState(),
         ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Practice English',
-        home: HomePage(),
+        initialRoute: "/",
+        routes: {
+          "/": (context) => const MainPage(),
+          "/test-page": (context) => const TestPage(),
+        },
+        //home: HomePage(),
       ),
     );
   }

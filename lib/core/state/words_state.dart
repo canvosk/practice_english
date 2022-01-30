@@ -14,7 +14,7 @@ class WordsState with ChangeNotifier {
 
   Words get lastWord => _words.first;
 
-  Future createWords() async {
+  Future<void> createWords() async {
     final translator = GoogleTranslator();
     final wordPair = WordPair.random();
 
@@ -27,44 +27,53 @@ class WordsState with ChangeNotifier {
     print("Kelime uretildi: " + _words[0].toString());
 
     notifyListeners();
+
+    //return _words[0].toString();
   }
 
-  List<String> option = [];
-
   Future<List<String>> createChoice() async {
-    option.clear();
+    final List<String> _options = <String>[];
+
+    _options.clear();
 
     String trueChoice;
     final translator = GoogleTranslator();
 
     trueChoice = _words.first.translatedToTr;
-    option.add(trueChoice);
-    log("Dogru cevap: " + trueChoice);
+    _options.add(trueChoice);
+    //log("Dogru cevap: " + trueChoice);
 
     var choice2 = await translator.translate(WordPair.random().first.toString(),
         from: 'en', to: 'tr');
 
-    option.add(choice2.text);
-    log("2. cevap: " + choice2.toString());
+    _options.add(choice2.text);
+    //log("2. cevap: " + choice2.toString());
 
     var choice3 = await translator.translate(WordPair.random().first.toString(),
         from: 'en', to: 'tr');
 
-    option.add(choice3.text);
-    log("3. cevap: " + choice3.toString());
+    _options.add(choice3.text);
+    //log("3. cevap: " + choice3.toString());
 
     var choice4 = await translator.translate(WordPair.random().first.toString(),
         from: 'en', to: 'tr');
 
-    option.add(choice4.text);
-    log("4. cevap: " + choice4.toString());
+    _options.add(choice4.text);
+    //log("4. cevap: " + choice4.toString());
 
-    option.shuffle();
+    _options.shuffle();
 
-    print("List: " + option.toString());
+    print("List: " + _options.toString());
 
     notifyListeners();
 
-    return option;
+    return _options;
+  }
+
+  Future<List<String>> doIt(List<String> x) async {
+    createWords();
+    x = await createChoice();
+    notifyListeners();
+    return x;
   }
 }
