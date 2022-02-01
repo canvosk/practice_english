@@ -14,9 +14,7 @@ class Answers extends StatefulWidget {
 
 class _AnswersState extends State<Answers> {
   int? selectedAnswer;
-
   WordsState words = WordsState();
-
   List<String> _options = <String>[
     // "Answer 1",
     // "Answer 2",
@@ -24,20 +22,32 @@ class _AnswersState extends State<Answers> {
     // "Answer 4",
   ];
 
-  @override
-  void initState() {
-    // words.createWords();
-    // _options = words.createChoice();
-    //words.doIt(_options);
-    super.initState();
-    setState(() {
-      deneme();
-    });
+  bool cond = false;
+  sorgu() {
+    if (_options.length == 4) {
+      cond = true;
+    } else {
+      cond = false;
+    }
   }
 
-  deneme() async {
-    await words.createWords();
-    _options = await words.createChoice();
+  @override
+  void initState() {
+    var c = Provider.of<WordsState>(context, listen: false);
+    Future.delayed(Duration.zero).then((value) async {
+      Provider.of<WordsState>(context, listen: false).createWords();
+    });
+
+    log("Yeni Kelime: " + c.words.first.englishWords);
+
+    Future.delayed(Duration.zero).then((value) async {
+      _options =
+          await Provider.of<WordsState>(context, listen: false).createChoice();
+    });
+
+    log("Siklar: " + _options.toString());
+    sorgu();
+    super.initState();
   }
 
   @override
@@ -48,10 +58,13 @@ class _AnswersState extends State<Answers> {
       return Column(
         children: [
           Center(
-            child: Text(
-              state.words.first.englishWords,
-              style: GoogleFonts.dongle(textStyle: questionText, fontSize: 80),
-            ),
+            child: cond
+                ? Text(
+                    state.words.first.englishWords,
+                    style: GoogleFonts.dongle(
+                        textStyle: questionText, fontSize: 80),
+                  )
+                : null,
           ),
           const Divider(),
           for (var o in _options) _answer(o),
@@ -59,9 +72,12 @@ class _AnswersState extends State<Answers> {
           ElevatedButton(
             onPressed: () async {
               var state = Provider.of<WordsState>(context, listen: false);
-              await state.createWords();
-              _options = await state.createChoice();
-              // words.doIt(_options);
+              cond = false;
+              Future.delayed(Duration.zero).then((value) async {
+                await state.createWords();
+                _options = await state.createChoice();
+                sorgu();
+              });
             },
             child: const Text("Yeni Soruya Gec"),
           )
@@ -73,10 +89,12 @@ class _AnswersState extends State<Answers> {
   Widget _answer(String option) {
     int index = _options.indexOf(option);
     return ListTile(
-      title: Text(
-        option,
-        style: GoogleFonts.dongle(textStyle: questionText, fontSize: 35),
-      ),
+      title: cond
+          ? Text(
+              option,
+              style: GoogleFonts.dongle(textStyle: questionText, fontSize: 35),
+            )
+          : null,
       selectedColor: Colors.blue,
       selected: index == selectedAnswer,
       onTap: () {

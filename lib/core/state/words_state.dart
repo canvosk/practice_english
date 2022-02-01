@@ -10,6 +10,8 @@ class WordsState with ChangeNotifier {
     Words(englishWords: "Beach", translatedToTr: "Kumsal"),
   ];
 
+  bool condition = false;
+
   List<Words> get words => _words;
 
   Words get lastWord => _words.first;
@@ -35,7 +37,8 @@ class WordsState with ChangeNotifier {
     final List<String> _options = <String>[];
 
     _options.clear();
-
+    condition = false;
+    log("log cond:" + condition.toString());
     String trueChoice;
     final translator = GoogleTranslator();
 
@@ -64,16 +67,11 @@ class WordsState with ChangeNotifier {
     _options.shuffle();
 
     print("List: " + _options.toString());
+    condition = true;
+    log("2. log cond:" + condition.toString());
 
     notifyListeners();
 
     return _options;
-  }
-
-  Future<List<String>> doIt(List<String> x) async {
-    createWords();
-    x = await createChoice();
-    notifyListeners();
-    return x;
   }
 }

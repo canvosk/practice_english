@@ -5,11 +5,11 @@ class MainPageBody extends StatelessWidget {
   const MainPageBody({Key? key}) : super(key: key);
   final String button1 = " Test Page";
 
-  void x() {
-    WordsState words = WordsState();
-    words.createWords();
-    words.createChoice();
-  }
+  // void x() {
+  //   WordsState words = WordsState();
+  //   words.createWords();
+  //   words.createChoice();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class MainPageBody extends StatelessWidget {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  x();
+                  //x();
                   Navigator.pushNamed(context, "/test-page");
                 },
                 child: Text(button1))
