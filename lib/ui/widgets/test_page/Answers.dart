@@ -13,17 +13,10 @@ class Answers extends StatefulWidget {
 }
 
 class _AnswersState extends State<Answers> {
-  int? selectedAnswer;
-  WordsState words = WordsState();
-  List<String> _options = <String>[
-    // "Answer 1",
-    // "Answer 2",
-    // "Answer 3",
-    // "Answer 4",
-  ];
+  List<String> _options = <String>[];
 
   bool cond = false;
-  sorgu() {
+  checkListLenght() {
     if (_options.length == 4) {
       cond = true;
     } else {
@@ -31,22 +24,41 @@ class _AnswersState extends State<Answers> {
     }
   }
 
+  bool answerIs = true;
+  int step = 1;
+  void checkAnswer(String word) {
+    setState(() {
+      step = 2;
+      var v = Provider.of<WordsState>(context, listen: false);
+      if (word == v.words.first.translatedToTr) {
+        answerIs = true;
+        //log("dogru kelime: " + word);
+      } else {
+        answerIs = false;
+        //log("yanlis kelime: " + word);
+      }
+    });
+  }
+
   @override
   void initState() {
+    int sayac = 0;
     var c = Provider.of<WordsState>(context, listen: false);
     Future.delayed(Duration.zero).then((value) async {
-      Provider.of<WordsState>(context, listen: false).createWords();
+      c.createWords();
+      sayac++;
     });
 
-    log("Yeni Kelime: " + c.words.first.englishWords);
+    //log("Yeni Kelime: " + c.words.first.englishWords);
+    if (sayac == 1) {
+      Future.delayed(Duration.zero).then((value) async {
+        _options = await c.createChoice();
+        log("Siklar: " + _options.toString());
+        checkListLenght();
+      });
+    }
+    Future.delayed(const Duration(seconds: 2));
 
-    Future.delayed(Duration.zero).then((value) async {
-      _options =
-          await Provider.of<WordsState>(context, listen: false).createChoice();
-    });
-
-    log("Siklar: " + _options.toString());
-    sorgu();
     super.initState();
   }
 
@@ -73,10 +85,11 @@ class _AnswersState extends State<Answers> {
             onPressed: () async {
               var state = Provider.of<WordsState>(context, listen: false);
               cond = false;
+              step = 1;
               Future.delayed(Duration.zero).then((value) async {
                 await state.createWords();
                 _options = await state.createChoice();
-                sorgu();
+                checkListLenght();
               });
             },
             child: const Text("Yeni Soruya Gec"),
@@ -90,20 +103,29 @@ class _AnswersState extends State<Answers> {
     int index = _options.indexOf(option);
     return ListTile(
       title: cond
-          ? Text(
-              option,
-              style: GoogleFonts.dongle(textStyle: questionText, fontSize: 35),
+          ? ElevatedButton(
+              onPressed: () {
+                checkAnswer(_options[index]);
+              },
+              child: Text(
+                option,
+                style: GoogleFonts.dongle(textStyle: answersText, fontSize: 35),
+              ),
+              style: getStyle(index),
             )
           : null,
-      selectedColor: Colors.blue,
-      selected: index == selectedAnswer,
-      onTap: () {
-        if (!mounted) return;
-        setState(() {
-          selectedAnswer = index;
-        });
-        log("option #$index is checked");
-      },
     );
+  }
+
+  ButtonStyle getStyle(int index) {
+    if (step == 2) {
+      if (answerIs == true) {
+        return trueButton;
+      } else {
+        return wrongButton;
+      }
+    } else {
+      return regularButton;
+    }
   }
 }
