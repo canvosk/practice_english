@@ -14,8 +14,13 @@ class Answers extends StatefulWidget {
 
 class _AnswersState extends State<Answers> {
   List<String> _options = <String>[];
-
+  int selInd = -1;
+  int trueInd = -1;
   bool cond = false;
+  bool isButtonDisabled = false;
+  bool answerIs = true;
+  bool step = true;
+
   checkListLenght() {
     if (_options.length == 4) {
       cond = true;
@@ -24,40 +29,35 @@ class _AnswersState extends State<Answers> {
     }
   }
 
-  bool answerIs = true;
-  int step = 1;
-  void checkAnswer(String word) {
+  void checkAnswer({required int index}) {
     setState(() {
-      step = 2;
+      isButtonDisabled = true;
+      step = false;
+      log(_options[index]);
+
       var v = Provider.of<WordsState>(context, listen: false);
-      if (word == v.words.first.translatedToTr) {
+      if (_options[index] == v.words.first.translatedToTr) {
+        trueInd = index;
         answerIs = true;
-        //log("dogru kelime: " + word);
       } else {
+        trueInd = _options.indexOf(v.words.first.translatedToTr);
         answerIs = false;
-        //log("yanlis kelime: " + word);
       }
     });
   }
 
   @override
   void initState() {
-    int sayac = 0;
-    var c = Provider.of<WordsState>(context, listen: false);
+    var state = Provider.of<WordsState>(context, listen: false);
+    isButtonDisabled = false;
+    cond = false;
+    step = true;
+    selInd = -1;
     Future.delayed(Duration.zero).then((value) async {
-      c.createWords();
-      sayac++;
+      await state.createWords();
+      _options = await state.createChoice();
+      checkListLenght();
     });
-
-    //log("Yeni Kelime: " + c.words.first.englishWords);
-    if (sayac == 1) {
-      Future.delayed(Duration.zero).then((value) async {
-        _options = await c.createChoice();
-        log("Siklar: " + _options.toString());
-        checkListLenght();
-      });
-    }
-    Future.delayed(const Duration(seconds: 2));
 
     super.initState();
   }
@@ -69,60 +69,105 @@ class _AnswersState extends State<Answers> {
 
       return Column(
         children: [
-          Center(
-            child: cond
-                ? Text(
-                    state.words.first.englishWords,
-                    style: GoogleFonts.dongle(
-                        textStyle: questionText, fontSize: 80),
-                  )
-                : null,
-          ),
-          const Divider(),
+          textQuestion(state),
           for (var o in _options) _answer(o),
-          const Divider(),
-          ElevatedButton(
-            onPressed: () async {
-              var state = Provider.of<WordsState>(context, listen: false);
-              cond = false;
-              step = 1;
-              Future.delayed(Duration.zero).then((value) async {
-                await state.createWords();
-                _options = await state.createChoice();
-                checkListLenght();
-              });
-            },
-            child: const Text("Yeni Soruya Gec"),
-          )
+          Center(
+            child: step ? null : nextQue(),
+          ),
         ],
       );
     });
   }
 
-  Widget _answer(String option) {
-    int index = _options.indexOf(option);
-    return ListTile(
-      title: cond
-          ? ElevatedButton(
-              onPressed: () {
-                checkAnswer(_options[index]);
-              },
-              child: Text(
-                option,
-                style: GoogleFonts.dongle(textStyle: answersText, fontSize: 35),
-              ),
-              style: getStyle(index),
+  Center textQuestion(WordsState state) {
+    return Center(
+      child: cond
+          ? Text(
+              state.words.first.englishWords,
+              style: GoogleFonts.dongle(textStyle: questionText),
             )
           : null,
     );
   }
 
-  ButtonStyle getStyle(int index) {
-    if (step == 2) {
+  Widget nextQue() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30),
+      child: FloatingActionButton(
+        onPressed: () async {
+          nextQueFunc();
+        },
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.navigate_next_sharp),
+      ),
+    );
+  }
+
+  nextQueFunc() async {
+    setState(() {
+      isButtonDisabled = false;
+    });
+    var state = Provider.of<WordsState>(context, listen: false);
+    cond = false;
+    step = true;
+    selInd = -1;
+    Future.delayed(Duration.zero).then((value) async {
+      await state.createWords();
+      _options = await state.createChoice();
+      checkListLenght();
+    });
+  }
+
+  Widget _answer(String option) {
+    int index = _options.indexOf(option);
+
+    return ListTile(
+      title: cond ? elevatedButton(index, option) : null,
+    );
+  }
+
+  ElevatedButton elevatedButton(int index, String option) {
+    return ElevatedButton(
+      onPressed: isButtonDisabled
+          ? null
+          : () {
+              selectChoice(index);
+            },
+      child: Text(
+        option,
+        style: GoogleFonts.dongle(textStyle: answersText, fontSize: 35),
+      ),
+      style: getStyle(index),
+    );
+  }
+
+  selectChoice(int index) {
+    setState(() {
+      isButtonDisabled = true;
+    });
+    selInd = index;
+    step = false;
+    checkAnswer(index: selInd);
+  }
+
+  ButtonStyle getStyle(int selected) {
+    var v = Provider.of<WordsState>(context, listen: false);
+    int abc = _options.indexOf(v.words.first.translatedToTr);
+    if (step == false) {
       if (answerIs == true) {
-        return trueButton;
+        if (selected == selInd) {
+          return trueButton;
+        } else {
+          return regularButton;
+        }
       } else {
-        return wrongButton;
+        if (selected == selInd) {
+          return wrongButton;
+        }
+        while (trueInd == selected) {
+          return trueButton;
+        }
+        return regularButton;
       }
     } else {
       return regularButton;

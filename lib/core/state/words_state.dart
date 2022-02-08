@@ -26,8 +26,6 @@ class WordsState with ChangeNotifier {
     Words x = Words(englishWords: newWord, translatedToTr: translated.text);
     _words.insert(0, x);
 
-    print("Kelime uretildi: " + _words[0].toString());
-
     notifyListeners();
 
     //return _words[0].toString();
@@ -66,7 +64,6 @@ class WordsState with ChangeNotifier {
 
     _options.shuffle();
 
-    print("List: " + _options.toString());
     condition = true;
     log("2. log cond:" + condition.toString());
 
