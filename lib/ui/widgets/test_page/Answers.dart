@@ -151,8 +151,8 @@ class _AnswersState extends State<Answers> {
   }
 
   ButtonStyle getStyle(int selected) {
-    var v = Provider.of<WordsState>(context, listen: false);
-    int abc = _options.indexOf(v.words.first.translatedToTr);
+    //var v = Provider.of<WordsState>(context, listen: false);
+    //int abc = _options.indexOf(v.words.first.translatedToTr);
     if (step == false) {
       if (answerIs == true) {
         if (selected == selInd) {

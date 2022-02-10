@@ -4,14 +4,48 @@ import 'package:flutter/material.dart';
 
 const appBarText = TextStyle(color: Colors.black);
 
-const mainPageText =
-    TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
+const mainPageText = TextStyle(
+  color: Colors.white,
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+  shadows: [
+    Shadow(
+      offset: Offset(1, 0.5),
+      blurRadius: 8.0,
+      color: Color.fromARGB(255, 0, 0, 0),
+    ),
+  ],
+);
 
-const mainPageSub = TextStyle(color: Colors.white);
+const mainPageSub = TextStyle(
+  color: Colors.white,
+  fontStyle: FontStyle.italic,
+  shadows: [
+    Shadow(
+      offset: Offset(1, 0.5),
+      blurRadius: 8.0,
+      color: Color.fromARGB(255, 0, 0, 0),
+    ),
+  ],
+);
 
 const questionText = TextStyle(color: Colors.black, fontSize: 80);
 
 const answersText = TextStyle(color: Colors.white);
+
+// TextStyle(
+//     shadows: <Shadow>[
+//       Shadow(
+//         offset: Offset(10.0, 10.0),
+//         blurRadius: 3.0,
+//         color: Color.fromARGB(255, 0, 0, 0),
+//       ),
+//       Shadow(
+//         offset: Offset(10.0, 10.0),
+//         blurRadius: 8.0,
+//         color: Color.fromARGB(125, 0, 0, 255),
+//       ),
+//     ],
 
 //ICONS
 
@@ -67,10 +101,26 @@ const shapeAppBar = RoundedRectangleBorder(
 
 //MAIN-PAGE
 
-var gradient = BoxDecoration(
+var redToPurpleGradient = BoxDecoration(
     shape: BoxShape.rectangle,
     borderRadius: BorderRadius.circular(15),
     gradient: const LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
         colors: [Colors.red, Colors.purple]));
+
+var yellowToOrangeGradient = BoxDecoration(
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(15),
+    gradient: const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [Colors.yellow, Colors.orange]));
+
+var blueToBlueGradient = BoxDecoration(
+    shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(15),
+    gradient: const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [Colors.blueAccent, Colors.blue]));

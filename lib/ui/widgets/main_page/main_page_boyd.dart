@@ -9,35 +9,49 @@ class MainPageBody extends StatelessWidget {
   final String goListTitle = "Kelimeleri Listele";
   final String goListSubTitle =
       "Çözmüş olduğunuz tüm kelimeleri türkçeleriyle birlikte listeler";
+  final String goFavTitle = "Favorilerimi Listele";
+  final String goFavSubTitle =
+      "Favori olarak eklediğiniz ingilizce kelimeler listelenir";
   final testPageRoute = "/test-page";
   final listPageRoute = "/list-page";
+  final favPageRoute = "/fav-page";
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(30),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        //crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           buttonContainer(
             context,
             goTestTitle,
             goTestSubTitle,
             testPageRoute,
+            redToPurpleGradient,
           ),
           buttonContainer(
             context,
             goListTitle,
             goListSubTitle,
             listPageRoute,
+            yellowToOrangeGradient,
+          ),
+          buttonContainer(
+            context,
+            goFavTitle,
+            goFavSubTitle,
+            favPageRoute,
+            blueToBlueGradient,
           ),
         ],
       ),
     );
   }
 
-  Container buttonContainer(
-      BuildContext context, String title, String subTitle, String route) {
+  Container buttonContainer(BuildContext context, String title, String subTitle,
+      String route, BoxDecoration gradient) {
     return Container(
       height: 100,
       alignment: Alignment.centerLeft,
