@@ -33,20 +33,6 @@ const questionText = TextStyle(color: Colors.black, fontSize: 80);
 
 const answersText = TextStyle(color: Colors.white);
 
-// TextStyle(
-//     shadows: <Shadow>[
-//       Shadow(
-//         offset: Offset(10.0, 10.0),
-//         blurRadius: 3.0,
-//         color: Color.fromARGB(255, 0, 0, 0),
-//       ),
-//       Shadow(
-//         offset: Offset(10.0, 10.0),
-//         blurRadius: 8.0,
-//         color: Color.fromARGB(125, 0, 0, 255),
-//       ),
-//     ],
-
 //ICONS
 
 const Icon trueIcon = Icon(
@@ -96,7 +82,13 @@ BoxDecoration listPageDec = BoxDecoration(
 //APPBAR
 
 const shapeAppBar = RoundedRectangleBorder(
-  borderRadius: BorderRadius.vertical(bottom: Radius.circular(7)),
+  borderRadius: BorderRadius.vertical(
+    bottom: Radius.circular(7),
+  ),
+);
+
+const appBarIcon = IconThemeData(
+  color: Colors.black, //change your color here
 );
 
 //MAIN-PAGE

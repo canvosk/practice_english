@@ -57,6 +57,7 @@ class _ListPageBodyState extends State<ListPageBody> {
       Words w = state.words[index];
       alreadySaved = state.favs.contains(w);
     }
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       elevation: 4,
