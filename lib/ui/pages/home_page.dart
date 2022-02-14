@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return myScaffold(
-      myAppBar(),
+      const MyAppBar(),
       const MyBody(),
     );
     // return Scaffold(
